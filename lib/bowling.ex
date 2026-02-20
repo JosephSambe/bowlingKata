@@ -1,18 +1,6 @@
 defmodule Bowling do
-  @moduledoc """
-  Documentation for `Bowling`.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Bowling.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  #Code guven by professor
+  def score(_game) do
+    0
   end
 end
