@@ -1,5 +1,7 @@
 defmodule Bowling do
 
+  #Redisigned/simpler code version
+
   def score([]), do: 0
 
   def score([head|tail]) do
@@ -8,30 +10,38 @@ defmodule Bowling do
     #second number equals the second element of the list "head"
     second = Enum.at(head, 1)
 
-    #THIS WILL ONLY WORK WITH THIS SPECIFIC TEST, IT WONT WORK FOR THE STRIKE!!
-    #if the total punctiation == 10, it adds first + second + another fucntion triggered by the attom :spare, sending the tail and
-    #following its explained logic
-    if first + second == 10 do
-      first + second + score(tail, :spare)
-    #if not, it adds first + second + a recurssion to its own by sending the tail and beginning the process again until reaching ([])
-    else
-    first + second + score(tail)
+    #It compares via Cond the possible outcomes: strike, spare or plain
+    cond do
+      #STRIKE
+      #It applies recursion calling itself till meeting ([]) and it sums the call to strike_bonus
+      first == 10 ->
+        10 + strike_bonus(tail) + score(tail)
+
+      #SPARE
+      #It applies recursion calling itself till meeting ([]) and it sums the next immediat shot
+      first + second == 10 ->
+        10 + Enum.at(Enum.at(tail, 0), 0) + score(tail)
+
+      #PLAIN
+      #It adds first + second + a recurssion to its own by sending the tail and beginning the process again until reaching ([])
+      true ->
+        first + second + score(tail)
     end
   end
 
-  def score([head|tail], :spare) do
-    #first number equals the first element of the list "head"
-    first = Enum.at(head, 0)
-    #second number equals the second element of the list "head"
-    second = Enum.at(head, 1)
+  #This function will sum the following two shots to the shot that triggered the Strike.
+  defp strike_bonus(tail) do
+    next_round = Enum.at(tail, 0)
+    verynext_round = Enum.at(tail, 1)
 
-    #THIS WILL ONLY WORK WITH THIS SPECIFIC TEST, IT WONT WORK FOR THE STRIKE!!
-    #if the total punctiation == 10, it adds first + second + a recurssion to its own by sending the tail and the attom :spare
-    if first + second == 10 do
-      (first * 2) + second + score(tail, :spare)
+    #Checks if the next shot was also a strike, so that it guarantees grabbing the real next shot
+    if Enum.at(next_round, 0) == 10 do
+      10 + Enum.at(verynext_round, 0)
+
+    #Discards the next shot being a strike and grabs the shot of the next round
     else
-    #if not, it adds first + second + a call to the normal function sending its tail
-    (first * 2) + second + score(tail)
+      Enum.at(next_round, 0) + Enum.at(next_round, 1)
     end
   end
+
 end
