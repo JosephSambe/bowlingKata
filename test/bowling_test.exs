@@ -30,4 +30,10 @@ defmodule BowlingTest do
     game = List.duplicate([10,nil], 9) ++ [[10,10,10]]
     assert Bowling.score(game) == 300
   end
+
+  #test created by me to ensure a normal game
+  test "mixed game with strikes and spares" do
+    game = [[10, 0], [3, 7], [10, 0], [10, 0], [5,4]] ++ List.duplicate([0, 0], 4) ++ [[0, 0, nil]]
+    assert Bowling.score(game) == 93
+  end
 end
